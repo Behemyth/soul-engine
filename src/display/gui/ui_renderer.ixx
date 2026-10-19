@@ -8,18 +8,17 @@ import :ui_types;
 
 export namespace synodic::soul::gui
 {
-
 	// Push constants for UI rendering (must match ui.slang UIPushConstants)
 	struct UIPushConstants
 	{
 		float screenWidth;
 		float screenHeight;
 		float _padding[2];
-		std::uint32_t textureIndex;   // Index into texture heap (0 = no texture / solid color)
-		std::uint32_t samplerIndex;   // Index into sampler heap
-		std::uint32_t flags;          // Bit flags: 0x1 = has texture, 0x2 = SDF text
-		float sdfEdge;                // SDF edge threshold (for text)
-		float sdfSmoothing;           // SDF smoothing (for text)
+		std::uint32_t textureIndex;	 // Index into texture heap (0 = no texture / solid color)
+		std::uint32_t samplerIndex;	 // Index into sampler heap
+		std::uint32_t flags;		 // Bit flags: 0x1 = has texture, 0x2 = SDF text
+		float sdfEdge;				 // SDF edge threshold (for text)
+		float sdfSmoothing;			 // SDF smoothing (for text)
 		float _padding2[3];
 	};
 
@@ -30,11 +29,11 @@ export namespace synodic::soul::gui
 	{
 		// Draw call info
 		std::uint32_t indexOffset = 0;
-		std::uint32_t indexCount = 0;
+		std::uint32_t indexCount  = 0;
 
 		// Texture binding (0 = no texture / solid color)
 		std::uint32_t textureIndex = 0;
-		std::uint32_t flags = 0;
+		std::uint32_t flags		   = 0;
 
 		// Clip rectangle
 		UIRect clipRect;
@@ -44,15 +43,15 @@ export namespace synodic::soul::gui
 	struct UIRendererConfig
 	{
 		// Maximum vertices/indices per frame (grows dynamically if exceeded)
-		std::uint32_t initialVertexCapacity = 65536;
-		std::uint32_t initialIndexCapacity = 131072;
+		std::uint32_t initialVertexCapacity = 65'536;
+		std::uint32_t initialIndexCapacity	= 131'072;
 
 		// Font atlas configuration
-		std::uint32_t atlasWidth = 1024;
+		std::uint32_t atlasWidth  = 1024;
 		std::uint32_t atlasHeight = 1024;
 
 		// Path to UI shader
-		std::filesystem::path shaderPath = "resources/Shaders/ui.slang";
+		std::filesystem::path shaderPath = "resources/shaders/ui.slang";
 
 		// Default font to load (empty = no default font)
 		std::filesystem::path defaultFontPath;
@@ -70,51 +69,48 @@ export namespace synodic::soul::gui
 		[[nodiscard]] virtual bool Initialize(const UIRendererConfig& config) = 0;
 
 		// Prepare frame data from draw list
-		virtual void PrepareFrame(
-			const UIDrawList& drawList,
-			float screenWidth,
-			float screenHeight) = 0;
+		virtual void PrepareFrame(const UIDrawList& drawList, float screenWidth, float screenHeight) = 0;
 
 		// Record draw commands to command list
 		virtual void RecordCommands(CommandList& commandList) = 0;
 
 		// Access font atlas for text measurement
-		[[nodiscard]] virtual FontAtlas& GetFontAtlas() = 0;
+		[[nodiscard]] virtual FontAtlas& GetFontAtlas()				= 0;
 		[[nodiscard]] virtual const FontAtlas& GetFontAtlas() const = 0;
 
 		// Upload updated atlas texture to GPU (call after adding fonts)
 		virtual void UploadFontAtlas() = 0;
 
 	protected:
-		IUIRenderer() = default;
-		IUIRenderer(const IUIRenderer&) = default;
-		IUIRenderer(IUIRenderer&&) = default;
+		IUIRenderer()							   = default;
+		IUIRenderer(const IUIRenderer&)			   = default;
+		IUIRenderer(IUIRenderer&&)				   = default;
 		IUIRenderer& operator=(const IUIRenderer&) = default;
-		IUIRenderer& operator=(IUIRenderer&&) = default;
+		IUIRenderer& operator=(IUIRenderer&&)	   = default;
 	};
 
 	// Concrete UI renderer using the raster backend
 	class UIRenderer : public IUIRenderer
 	{
 	public:
-		UIRenderer() = default;
+		UIRenderer()		   = default;
 		~UIRenderer() override = default;
 
-		UIRenderer(const UIRenderer&) = delete;
-		UIRenderer& operator=(const UIRenderer&) = delete;
-		UIRenderer(UIRenderer&&) noexcept = default;
+		UIRenderer(const UIRenderer&)				 = delete;
+		UIRenderer& operator=(const UIRenderer&)	 = delete;
+		UIRenderer(UIRenderer&&) noexcept			 = default;
 		UIRenderer& operator=(UIRenderer&&) noexcept = default;
 
 		[[nodiscard]] bool Initialize(const UIRendererConfig& config) override
 		{
-			config_ = config;
+			config_	   = config;
 			fontAtlas_ = FontAtlas(config.atlasWidth, config.atlasHeight);
 
 			// Load default font if specified
 			if (!config.defaultFontPath.empty())
 			{
 				FontAtlasConfig fontConfig;
-				fontConfig.fontPath = config.defaultFontPath;
+				fontConfig.fontPath	 = config.defaultFontPath;
 				fontConfig.pixelSize = config.defaultFontSize;
 
 				if (!fontAtlas_.AddFont(fontConfig))
@@ -130,17 +126,14 @@ export namespace synodic::soul::gui
 			return true;
 		}
 
-		void PrepareFrame(
-			const UIDrawList& drawList,
-			float screenWidth,
-			float screenHeight) override
+		void PrepareFrame(const UIDrawList& drawList, float screenWidth, float screenHeight) override
 		{
 			// Clear previous frame data
 			vertices_.clear();
 			indices_.clear();
 			batches_.clear();
 
-			screenWidth_ = screenWidth;
+			screenWidth_  = screenWidth;
 			screenHeight_ = screenHeight;
 
 			// Convert draw commands to vertices/indices
@@ -156,12 +149,12 @@ export namespace synodic::soul::gui
 
 			// Set up push constants (screen dimensions + texture info)
 			UIPushConstants pushConstants;
-			pushConstants.screenWidth = screenWidth_;
+			pushConstants.screenWidth  = screenWidth_;
 			pushConstants.screenHeight = screenHeight_;
 			pushConstants.textureIndex = 0;
 			pushConstants.samplerIndex = 0;
-			pushConstants.flags = 0;  // No texture for basic UI
-			pushConstants.sdfEdge = 0.5f;
+			pushConstants.flags		   = 0;	 // No texture for basic UI
+			pushConstants.sdfEdge	   = 0.5f;
 			pushConstants.sdfSmoothing = 0.1f;
 
 			// For now, record a simple draw call
@@ -172,8 +165,15 @@ export namespace synodic::soul::gui
 			// This requires access to the GPU allocator from the raster backend
 		}
 
-		[[nodiscard]] FontAtlas& GetFontAtlas() override { return fontAtlas_; }
-		[[nodiscard]] const FontAtlas& GetFontAtlas() const override { return fontAtlas_; }
+		[[nodiscard]] FontAtlas& GetFontAtlas() override
+		{
+			return fontAtlas_;
+		}
+
+		[[nodiscard]] const FontAtlas& GetFontAtlas() const override
+		{
+			return fontAtlas_;
+		}
 
 		void UploadFontAtlas() override
 		{
@@ -186,57 +186,67 @@ export namespace synodic::soul::gui
 		}
 
 		// Access generated geometry (for external rendering)
-		[[nodiscard]] std::span<const UIVertex> GetVertices() const { return vertices_; }
-		[[nodiscard]] std::span<const std::uint32_t> GetIndices() const { return indices_; }
-		[[nodiscard]] std::span<const UIRenderBatch> GetBatches() const { return batches_; }
+		[[nodiscard]] std::span<const UIVertex> GetVertices() const
+		{
+			return vertices_;
+		}
+
+		[[nodiscard]] std::span<const std::uint32_t> GetIndices() const
+		{
+			return indices_;
+		}
+
+		[[nodiscard]] std::span<const UIRenderBatch> GetBatches() const
+		{
+			return batches_;
+		}
 
 	private:
 		void GenerateGeometry(const UIDrawList& drawList)
 		{
-			const auto& commands = drawList.Commands();
+			const auto& commands   = drawList.Commands();
 			const auto& textBuffer = drawList.TextBuffer();
 
 			UIRenderBatch currentBatch;
 			currentBatch.indexOffset = 0;
 
-			for (const auto& cmd : commands)
+			for (const auto& cmd: commands)
 			{
 				switch (cmd.type)
 				{
-				case UIDrawCommandType::Rect:
-					GenerateRect(cmd);
-					break;
+					case UIDrawCommandType::Rect :
+						GenerateRect(cmd);
+						break;
 
-				case UIDrawCommandType::RoundedRect:
-					GenerateRoundedRect(cmd);
-					break;
+					case UIDrawCommandType::RoundedRect :
+						GenerateRoundedRect(cmd);
+						break;
 
-				case UIDrawCommandType::Text:
-					GenerateText(cmd, textBuffer);
-					break;
+					case UIDrawCommandType::Text :
+						GenerateText(cmd, textBuffer);
+						break;
 
-				case UIDrawCommandType::Image:
-					GenerateImage(cmd);
-					break;
+					case UIDrawCommandType::Image :
+						GenerateImage(cmd);
+						break;
 
-				case UIDrawCommandType::PushClip:
-				case UIDrawCommandType::PopClip:
-				case UIDrawCommandType::PushScissor:
-				case UIDrawCommandType::PopScissor:
-					// Handle clipping state changes
-					// Would finalize current batch and start new one
-					break;
+					case UIDrawCommandType::PushClip :
+					case UIDrawCommandType::PopClip :
+					case UIDrawCommandType::PushScissor :
+					case UIDrawCommandType::PopScissor :
+						// Handle clipping state changes
+						// Would finalize current batch and start new one
+						break;
 
-				default:
-					break;
+					default :
+						break;
 				}
 			}
 
 			// Finalize last batch
 			if (indices_.size() > currentBatch.indexOffset)
 			{
-				currentBatch.indexCount = static_cast<std::uint32_t>(
-					indices_.size() - currentBatch.indexOffset);
+				currentBatch.indexCount = static_cast<std::uint32_t>(indices_.size() - currentBatch.indexOffset);
 				batches_.push_back(currentBatch);
 			}
 		}
@@ -248,28 +258,28 @@ export namespace synodic::soul::gui
 			// Four corners
 			UIVertex v0, v1, v2, v3;
 
-			v0.x = cmd.x;
-			v0.y = cmd.y;
-			v0.u = 0.0f;
-			v0.v = 0.0f;
+			v0.x	 = cmd.x;
+			v0.y	 = cmd.y;
+			v0.u	 = 0.0f;
+			v0.v	 = 0.0f;
 			v0.color = cmd.color;
 
-			v1.x = cmd.x + cmd.width;
-			v1.y = cmd.y;
-			v1.u = 1.0f;
-			v1.v = 0.0f;
+			v1.x	 = cmd.x + cmd.width;
+			v1.y	 = cmd.y;
+			v1.u	 = 1.0f;
+			v1.v	 = 0.0f;
 			v1.color = cmd.color;
 
-			v2.x = cmd.x + cmd.width;
-			v2.y = cmd.y + cmd.height;
-			v2.u = 1.0f;
-			v2.v = 1.0f;
+			v2.x	 = cmd.x + cmd.width;
+			v2.y	 = cmd.y + cmd.height;
+			v2.u	 = 1.0f;
+			v2.v	 = 1.0f;
 			v2.color = cmd.color;
 
-			v3.x = cmd.x;
-			v3.y = cmd.y + cmd.height;
-			v3.u = 0.0f;
-			v3.v = 1.0f;
+			v3.x	 = cmd.x;
+			v3.y	 = cmd.y + cmd.height;
+			v3.u	 = 0.0f;
+			v3.v	 = 1.0f;
 			v3.color = cmd.color;
 
 			vertices_.push_back(v0);
@@ -314,12 +324,12 @@ export namespace synodic::soul::gui
 
 			// Current cursor position
 			float cursorX = cmd.x;
-			float cursorY = cmd.y + font->ascender;  // Baseline
+			float cursorY = cmd.y + font->ascender;	 // Baseline
 
 			// Generate quad for each glyph
-			for (char c : text)
+			for (char c: text)
 			{
-				char32_t cp = static_cast<char32_t>(static_cast<unsigned char>(c));
+				char32_t cp		  = static_cast<char32_t>(static_cast<unsigned char>(c));
 				const auto* glyph = font->GetGlyph(cp);
 
 				if (!glyph)
@@ -343,28 +353,28 @@ export namespace synodic::soul::gui
 
 					UIVertex v0, v1, v2, v3;
 
-					v0.x = x0;
-					v0.y = y0;
-					v0.u = glyph->u0;
-					v0.v = glyph->v0;
+					v0.x	 = x0;
+					v0.y	 = y0;
+					v0.u	 = glyph->u0;
+					v0.v	 = glyph->v0;
 					v0.color = cmd.color;
 
-					v1.x = x1;
-					v1.y = y0;
-					v1.u = glyph->u1;
-					v1.v = glyph->v0;
+					v1.x	 = x1;
+					v1.y	 = y0;
+					v1.u	 = glyph->u1;
+					v1.v	 = glyph->v0;
 					v1.color = cmd.color;
 
-					v2.x = x1;
-					v2.y = y1;
-					v2.u = glyph->u1;
-					v2.v = glyph->v1;
+					v2.x	 = x1;
+					v2.y	 = y1;
+					v2.u	 = glyph->u1;
+					v2.v	 = glyph->v1;
 					v2.color = cmd.color;
 
-					v3.x = x0;
-					v3.y = y1;
-					v3.u = glyph->u0;
-					v3.v = glyph->v1;
+					v3.x	 = x0;
+					v3.y	 = y1;
+					v3.u	 = glyph->u0;
+					v3.v	 = glyph->v1;
 					v3.color = cmd.color;
 
 					vertices_.push_back(v0);
@@ -390,28 +400,28 @@ export namespace synodic::soul::gui
 
 			UIVertex v0, v1, v2, v3;
 
-			v0.x = cmd.x;
-			v0.y = cmd.y;
-			v0.u = cmd.params.uv.u0;
-			v0.v = cmd.params.uv.v0;
+			v0.x	 = cmd.x;
+			v0.y	 = cmd.y;
+			v0.u	 = cmd.params.uv.u0;
+			v0.v	 = cmd.params.uv.v0;
 			v0.color = cmd.color;
 
-			v1.x = cmd.x + cmd.width;
-			v1.y = cmd.y;
-			v1.u = cmd.params.uv.u1;
-			v1.v = cmd.params.uv.v0;
+			v1.x	 = cmd.x + cmd.width;
+			v1.y	 = cmd.y;
+			v1.u	 = cmd.params.uv.u1;
+			v1.v	 = cmd.params.uv.v0;
 			v1.color = cmd.color;
 
-			v2.x = cmd.x + cmd.width;
-			v2.y = cmd.y + cmd.height;
-			v2.u = cmd.params.uv.u1;
-			v2.v = cmd.params.uv.v1;
+			v2.x	 = cmd.x + cmd.width;
+			v2.y	 = cmd.y + cmd.height;
+			v2.u	 = cmd.params.uv.u1;
+			v2.v	 = cmd.params.uv.v1;
 			v2.color = cmd.color;
 
-			v3.x = cmd.x;
-			v3.y = cmd.y + cmd.height;
-			v3.u = cmd.params.uv.u0;
-			v3.v = cmd.params.uv.v1;
+			v3.x	 = cmd.x;
+			v3.y	 = cmd.y + cmd.height;
+			v3.u	 = cmd.params.uv.u0;
+			v3.v	 = cmd.params.uv.v1;
 			v3.color = cmd.color;
 
 			vertices_.push_back(v0);
@@ -428,9 +438,9 @@ export namespace synodic::soul::gui
 		}
 
 		UIRendererConfig config_;
-		FontAtlas fontAtlas_{1024, 1024};
+		FontAtlas fontAtlas_ {1024, 1024};
 
-		float screenWidth_ = 0.0f;
+		float screenWidth_	= 0.0f;
 		float screenHeight_ = 0.0f;
 
 		// CPU-side geometry buffers
@@ -438,5 +448,4 @@ export namespace synodic::soul::gui
 		std::vector<std::uint32_t> indices_;
 		std::vector<UIRenderBatch> batches_;
 	};
-
 }
