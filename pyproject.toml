@@ -11,19 +11,18 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = []
-requires-python = ">=3.14"
+requires-python = ">=3.15"
 
 [project.urls]
 homepage = "https://github.com/synodic/Soul-Engine"
 repository = "https://github.com/synodic/Soul-Engine"
 
-[project.optional-dependencies]
-build = ["cppython[cmake,conan,git]>=0.9.15.dev3"]
 [dependency-groups]
-lint = ["ruff>=0.14.8", "pyrefly>=0.44.1", "isort>=7.0.0"]
-test = ["pytest-cov>=7.0.0", "pytest-mock>=3.15.1"]
-docs = ["zensical>=0.0.11"]
-config = ["copier>=9.11.0"]
+lint = ["ruff>=0.15.22", "pyrefly>=1.2.0.dev2", "isort>=9.0.0b1"]
+test = ["pytest>=9.1.1", "pytest-cov>=7.1.0", "pytest-mock>=3.15.1"]
+docs = ["zensical>=0.0.51"]
+config = ["copier>=9.17.0"]
+native = ["cppython[cmake,conan,git]", "ninja>=1.13.0"]
 
 [tool.cppython]
 dependencies = [
@@ -35,7 +34,9 @@ dependencies = [
 	'vulkan-memory-allocator==3.3.0',
 	'glaze>=6.0.1',
 	'freetype==2.14.1',
-	'meshoptimizer==0.25'
+	'meshoptimizer==0.25',
+	'vulkan-headers==1.4.357.0',
+	'vulkan-loader==1.4.357.0',
 ]
 
 [tool.cppython.generators.cmake]
@@ -45,6 +46,7 @@ configuration_name = "default"
 [tool.cppython.providers.conan]
 remotes = []
 skip_upload = true
+settings = { "compiler.cppstd" = "23" }
 
 [tool.pytest.ini_options]
 log_cli = true
@@ -83,11 +85,17 @@ quote-style = "single"
 skip_empty = true
 
 [tool.pdm.scripts]
-build  = "cppython build"
-test  = "cppython test"
-dev  = "zensical serve"
-post_install = "copier recopy --force --skip-answered"
-post_update = "copier recopy --force --skip-answered"
+build = "cppython build"
+test = "cppython test"
+dev = "zensical serve"
+config-check = "copier check-update ."
+config-update = "copier update --conflict inline --skip-answered ."
+
+[tool.porringer]
+manifest = "tool/porringer/porringer.json"
+
+[tool.pdm.resolution]
+allow-prereleases = true
 
 [build-system]
 build-backend = "pdm.backend"

@@ -1,0 +1,37 @@
+{
+    "$schema": "https://synodic.github.io/porringer/schema.json",
+    "version": "1",
+    "name": "Soul Engine",
+    "description": "A real-time rendering engine",
+    "author": "Synodic Software",
+    "url": "https://github.com/synodic/Soul-Engine",
+    "runtimes": {
+        "python": [
+            "3.15"
+        ]
+    },
+    "tools": {
+        "python": [
+            {
+                "name": "pdm",
+                "description": "Python package and dependency manager",
+                "installer": "pipx"
+            }
+        ]
+    },
+    "packages": {
+        "system": [
+            {
+                "name": {
+                    "name": "KhronosGroup.VulkanSDK",
+                    "constraint": "1.4.357.0"
+                },
+                "description": "Vulkan SDK, provides the Slang shader compiler",
+                "installer": "winget",
+                "platforms": [
+                    "win32"
+                ]
+            }
+        ]
+    }
+}
