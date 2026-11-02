@@ -28,6 +28,7 @@ native = ["cppython[cmake,conan,git]", "ninja>=1.13.0"]
 dependencies = [
 	'periapsis>=0.0.0.dev1',
 	'cppaste>=0.0.0.dev1',
+	'portability>=0.0.0.dev1',
 	'sdl>=3.2.20',
 	'vulkan-memory-allocator==3.3.0',
 	'glaze>=6.0.1',

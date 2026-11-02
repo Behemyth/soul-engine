@@ -15,6 +15,7 @@ project(SoulEngine
 
 # #############################################
 # Dependencies
+find_package(portability REQUIRED)
 find_package(periapsis REQUIRED)
 find_package(cppaste REQUIRED)
 find_package(SDL3 REQUIRED)
@@ -118,6 +119,7 @@ target_link_libraries(soul-engine
 	synodic::cppaste
 	PRIVATE
 	synodic::periapsis
+	synodic::portability
 	SDL3::SDL3
 	GPUOpen::VulkanMemoryAllocator
 	VulkanHppModule

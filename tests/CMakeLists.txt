@@ -32,6 +32,9 @@ add_subdirectory(
 	unit
 )
 
+# Honesty's installed package does not ship honesty_discover_tests, so register the runner as one test
+add_test(NAME soul-engine-tests COMMAND tests)
+
 # Glob all files to add a source group tree
 file(GLOB_RECURSE file_list ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
