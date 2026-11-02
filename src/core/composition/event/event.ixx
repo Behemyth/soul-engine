@@ -20,7 +20,7 @@ public:
 export template<typename>
 class Event;
 
-export template<typename R, typename... Types>
+template<typename R, typename... Types>
 class Event<R(Types...)> : public BaseEvent
 {
 

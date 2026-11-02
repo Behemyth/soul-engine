@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
-
-# Enable std module support for MSVC - MUST be before project()
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+cmake_minimum_required(VERSION 4.5 FATAL_ERROR)
 
 set(CMAKE_CXX_MODULE_STD ON)
 
@@ -18,8 +15,6 @@ project(SoulEngine
 
 # #############################################
 # Dependencies
-find_package(portability REQUIRED)
-find_package(honesty REQUIRED)
 find_package(periapsis REQUIRED)
 find_package(cppaste REQUIRED)
 find_package(SDL3 REQUIRED)
@@ -122,7 +117,6 @@ target_link_libraries(soul-engine
 	PUBLIC
 	synodic::cppaste
 	PRIVATE
-	synodic::honesty
 	synodic::periapsis
 	SDL3::SDL3
 	GPUOpen::VulkanMemoryAllocator
@@ -192,10 +186,17 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src FILES ${file_list})
 # #############################################
 # Sub-projects
 if(BUILD_TESTING AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
-	# Do not include CTest because it adds targets and integrations we do not want to support
-	enable_testing()
+	# Honesty is a test-only dependency, installed via the CPPython 'test' dependency group
+	find_package(honesty QUIET)
 
-	add_subdirectory(tests)
+	if(honesty_FOUND)
+		# Do not include CTest because it adds targets and integrations we do not want to support
+		enable_testing()
+
+		add_subdirectory(tests)
+	else()
+		message(STATUS "Honesty not found; skipping tests. Install with 'cppython install [test]' to enable them.")
+	endif()
 endif()
 
 if(BUILD_EXAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples)

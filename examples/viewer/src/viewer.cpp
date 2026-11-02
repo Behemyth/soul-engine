@@ -44,20 +44,20 @@ enum class RenderMode : std::int32_t {
 
 // Instance transform data (matches pbr.slang InstanceData)
 struct alignas(16) GPUInstanceData {
-	peri::math::mat4 mvp;           // Model-View-Projection
-	peri::math::mat4 model;         // Model matrix for world-space calculations  
-	peri::math::mat4 normalMatrix;  // Inverse transpose of model
+	peri::math::Mat4<float> mvp;           // Model-View-Projection
+	peri::math::Mat4<float> model;         // Model matrix for world-space calculations  
+	peri::math::Mat4<float> normalMatrix;  // Inverse transpose of model
 };
 static_assert(sizeof(GPUInstanceData) == 192, "GPUInstanceData must be 192 bytes");
 
 // Material data (matches pbr.slang MaterialData)
 struct alignas(16) GPUMaterialData {
-	peri::math::vec4 baseColor;     // RGB + alpha
+	peri::math::Vec4<float> baseColor;     // RGB + alpha
 	float metallic;
 	float roughness;
 	float ao;
 	float _padding0;
-	peri::math::vec4 emissive;      // RGB + intensity
+	peri::math::Vec4<float> emissive;      // RGB + intensity
 };
 static_assert(sizeof(GPUMaterialData) == 48, "GPUMaterialData must be 48 bytes");
 
@@ -190,7 +190,7 @@ protected:
 		}
 
 		// Load mesh from GLTF file, fallback to procedural cube
-		const std::filesystem::path meshPath = "resources/assets/box/box.glb";
+		const std::filesystem::path meshPath = std::filesystem::path(SOUL_ASSET_DIR) / "box/box.glb";
 		auto loadResult = synodic::soul::gltf::LoadMesh(meshPath);
 		if (loadResult)
 		{
@@ -225,7 +225,7 @@ protected:
 		viewMatrix_ = peri::math::LookAt(
 			cameraPosition_,
 			cameraTarget_,
-			peri::math::vec3{0.0f, 1.0f, 0.0f});  // Standard Y-up
+			peri::math::Vec3<float>{0.0f, 1.0f, 0.0f});  // Standard Y-up
 		projectionMatrix_ = peri::math::Perspective(
 			0.785398f,	// 45 degrees FOV
 			aspectRatio,
@@ -423,7 +423,7 @@ private:
 		viewMatrix_ = peri::math::LookAt(
 			cameraPosition_,
 			cameraTarget_,
-			peri::math::vec3{0.0f, 1.0f, 0.0f});  // Standard Y-up
+			peri::math::Vec3<float>{0.0f, 1.0f, 0.0f});  // Standard Y-up
 
 		// Update scene lighting camera position for specular
 		sceneLighting_.cameraPositionX = cameraPosition_.x;
@@ -431,7 +431,7 @@ private:
 		sceneLighting_.cameraPositionZ = cameraPosition_.z;
 
 		// Model matrix - identity (static cube at origin)
-		modelMatrix_ = peri::math::mat4{
+		modelMatrix_ = peri::math::Mat4<float>{
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
@@ -439,7 +439,7 @@ private:
 		};
 
 		// Compute MVP for push constant/vertex data
-		peri::math::mat4 vp = projectionMatrix_ * viewMatrix_;
+		peri::math::Mat4<float> vp = projectionMatrix_ * viewMatrix_;
 		pushConstants_.mvp	 = vp * modelMatrix_;
 		pushConstants_.model = modelMatrix_;
 	}
@@ -596,7 +596,7 @@ private:
 
 	// Window/surface state
 	Entity surfaceEntity_;
-	peri::math::uvec2 surfaceSize_ = {0, 0};
+	peri::math::Vec2<std::uint32_t> surfaceSize_ = {0, 0};
 	bool hasValidSurface_ = false;
 
 	// Mesh data (CPU-side, ready for GPU upload)
@@ -613,8 +613,8 @@ private:
 	SceneLightingData sceneLighting_;
 
 	// Camera
-	peri::math::vec3 cameraPosition_;
-	peri::math::vec3 cameraTarget_;
+	peri::math::Vec3<float> cameraPosition_;
+	peri::math::Vec3<float> cameraTarget_;
 
 	// Orbit camera controls
 	float orbitYaw_		 = 0.0f;
@@ -628,9 +628,9 @@ private:
 	float rotationAngle_ = 0.0f;
 
 	// Transforms
-	peri::math::mat4 modelMatrix_;
-	peri::math::mat4 viewMatrix_;
-	peri::math::mat4 projectionMatrix_;
+	peri::math::Mat4<float> modelMatrix_;
+	peri::math::Mat4<float> viewMatrix_;
+	peri::math::Mat4<float> projectionMatrix_;
 	PushConstantData pushConstants_;
 
 	// UI state

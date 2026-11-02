@@ -26,10 +26,8 @@ native = ["cppython[cmake,conan,git]", "ninja>=1.13.0"]
 
 [tool.cppython]
 dependencies = [
-	'honesty>=0.0.0.dev1',
 	'periapsis>=0.0.0.dev1',
 	'cppaste>=0.0.0.dev1',
-	'portability>=0.0.0.dev1',
 	'sdl>=3.2.20',
 	'vulkan-memory-allocator==3.3.0',
 	'glaze>=6.0.1',
@@ -39,9 +37,13 @@ dependencies = [
 	'vulkan-loader==1.4.357.0',
 ]
 
+[tool.cppython.dependency-groups]
+test = ['honesty>=0.0.0.dev1']
+
 [tool.cppython.generators.cmake]
 preset_file = "tool/cmake/platform/common/CMakePresets.json"
 configuration_name = "default"
+minimum-version = "4.5.0rc1"
 
 [tool.cppython.providers.conan]
 remotes = []

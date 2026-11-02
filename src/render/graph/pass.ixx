@@ -106,7 +106,7 @@ export struct ComputePassDesc {
 	std::vector<ResourceRef> inputs;
 	std::vector<ResourceRef> outputs;
 
-	peri::math::uvec2 dispatchSize = {1, 1};
+	peri::math::Vec2<std::uint32_t> dispatchSize = {1, 1};
 
 	std::uint32_t originalIndex = 0;
 };

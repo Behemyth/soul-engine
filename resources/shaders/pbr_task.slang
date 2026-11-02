@@ -154,13 +154,13 @@ void meshMain(
         verts[vi].clipPosition = mul(instance.mvp, float4(vertex.position, 1.0));
         verts[vi].worldPosition = worldPos.xyz;
         
-        float3 worldNormal = mul((float3x3)instance.normalMatrix, vertex.normal);
-        verts[vi].worldNormal = normalize(worldNormal);
+        float3 worldNormal = normalize(mul((float3x3)instance.normalMatrix, vertex.normal));
+        verts[vi].worldNormal = worldNormal;
         
-        float3 worldTangent = mul((float3x3)instance.model, vertex.tangent.xyz);
-        verts[vi].worldTangent = normalize(worldTangent);
+        float3 worldTangent = normalize(mul((float3x3)instance.model, vertex.tangent.xyz));
+        verts[vi].worldTangent = worldTangent;
         
-        verts[vi].worldBitangent = cross(verts[vi].worldNormal, verts[vi].worldTangent) * vertex.tangent.w;
+        verts[vi].worldBitangent = cross(worldNormal, worldTangent) * vertex.tangent.w;
         verts[vi].texCoord = vertex.texCoord;
     }
     

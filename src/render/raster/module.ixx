@@ -96,8 +96,8 @@ public:
 	virtual void CreatePassInput(Entity, Entity, Format)  = 0;
 	virtual void CreatePassOutput(Entity, Entity, Format) = 0;
 
-	virtual Entity CreateSurface(NativeSurfaceHandle, peri::math::uvec2) = 0;
-	virtual void UpdateSurface(Entity, peri::math::uvec2)	  = 0;
+	virtual Entity CreateSurface(NativeSurfaceHandle, peri::math::Vec2<std::uint32_t>) = 0;
+	virtual void UpdateSurface(Entity, peri::math::Vec2<std::uint32_t>)	  = 0;
 	virtual void RemoveSurface(Entity)			  = 0;
 	virtual void AttachSurface(Entity, Entity)	  = 0;
 	virtual void DetachSurface(Entity, Entity)	  = 0;

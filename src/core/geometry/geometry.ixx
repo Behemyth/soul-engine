@@ -12,10 +12,10 @@ public:
 	Vertex() = default;
 	~Vertex() = default;
 
-	peri::math::vec3 position;
-	peri::math::vec3 normal;
-	peri::math::vec2 textureCoord;
-	peri::math::vec3 velocity;
+	peri::math::Vec3<float> position;
+	peri::math::Vec3<float> normal;
+	peri::math::Vec2<float> textureCoord;
+	peri::math::Vec3<float> velocity;
 
 	std::uint32_t object;
 
@@ -28,8 +28,8 @@ public:
 	GUIVertex() = default;
 	~GUIVertex() = default;
 
-	peri::math::vec2 position;
-	peri::math::vec2 textureCoord;
+	peri::math::Vec2<float> position;
+	peri::math::Vec2<float> textureCoord;
 	std::uint32_t colour;
 
 };
@@ -42,7 +42,7 @@ public:
 	Face() = default;
 	~Face() = default;
 
-	peri::math::uvec3 indices;
+	peri::math::Vec3<std::uint32_t> indices;
 	std::uint32_t material; //TODO investigate materials
 };
 
@@ -54,8 +54,8 @@ public:
 	BoundingBox() = default;
 	~BoundingBox() = default;
 
-	peri::math::vec3 min;
-	peri::math::vec3 max;
+	peri::math::Vec3<float> min;
+	peri::math::Vec3<float> max;
 
 };
 
@@ -67,7 +67,7 @@ public:
 	Tet() = default;
 	~Tet() = default;
 
-	peri::math::uvec4 indices;
+	peri::math::Vec4<std::uint32_t> indices;
 	std::uint32_t material;
 	std::uint32_t object;
 

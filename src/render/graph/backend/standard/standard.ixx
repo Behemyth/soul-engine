@@ -13,7 +13,7 @@ export struct PassExecutionContext {
 	CommandList& commands;
 	FrameAllocator* allocator = nullptr;  // Per-frame GPU allocator for bindless data
 	ResourceHandle surfaceTarget = InvalidResourceHandle;
-	peri::math::uvec2 renderArea = {0, 0};
+	peri::math::Vec2<std::uint32_t> renderArea = {0, 0};
 };
 
 // Standard render graph backend implementation
@@ -71,7 +71,7 @@ public:
 	}
 
 	// Compile and execute the frame graph for a surface
-	void Execute(Entity surfaceEntity, peri::math::uvec2 surfaceSize) {
+	void Execute(Entity surfaceEntity, peri::math::Vec2<std::uint32_t> surfaceSize) {
 		if (!rasterModule_) {
 			return;
 		}
@@ -153,7 +153,7 @@ private:
 	void ExecuteRenderPass(
 		std::uint32_t passIndex,
 		Entity surfaceEntity,
-		peri::math::uvec2 surfaceSize,
+		peri::math::Vec2<std::uint32_t> surfaceSize,
 		CommandList& commandList,
 		PassExecutionFlags flags) {
 

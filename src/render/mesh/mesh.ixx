@@ -104,7 +104,7 @@ export inline AABB ComputeAABB(const MeshData& data) {
 
 	for (std::uint32_t i = 0; i < data.vertexCount; ++i) {
 		const float* vertex = data.vertexData.data() + (i * floatsPerVertex);
-		bounds = peri::math::Expand(bounds, peri::math::vec3{vertex[0], vertex[1], vertex[2]});
+		bounds = peri::math::Expand(bounds, peri::math::Vec3<float>{vertex[0], vertex[1], vertex[2]});
 	}
 	return bounds;
 }

@@ -203,13 +203,7 @@ typename VulkanDevice<SchedulerType>::BuildResult VulkanDevice<SchedulerType>::B
 	std::span<std::string> validationLayers,
 	std::span<std::string> requiredExtensions)
 {
-	// Convert strings to c-strings
-	std::vector<const char*> cValidationLayers;
-	cValidationLayers.reserve(validationLayers.size());
-	for (auto& layer: validationLayers)
-	{
-		cValidationLayers.push_back(layer.c_str());
-	}
+	// Device layers are deprecated; validation layers are enabled on the instance only
 
 	std::vector<const char*> cExtensions;
 	cExtensions.reserve(requiredExtensions.size());
@@ -383,8 +377,6 @@ typename VulkanDevice<SchedulerType>::BuildResult VulkanDevice<SchedulerType>::B
 	deviceCreateInfo.pQueueCreateInfos		 = queueCreateInfos.data();
 	deviceCreateInfo.enabledExtensionCount	 = static_cast<std::uint32_t>(cExtensions.size());
 	deviceCreateInfo.ppEnabledExtensionNames = cExtensions.data();
-	deviceCreateInfo.enabledLayerCount		 = static_cast<std::uint32_t>(cValidationLayers.size());
-	deviceCreateInfo.ppEnabledLayerNames	 = cValidationLayers.data();
 
 	vk::Device device = physicalDevice.createDevice(deviceCreateInfo);
 

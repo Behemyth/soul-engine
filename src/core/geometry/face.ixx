@@ -12,7 +12,7 @@ public:
 	Face() = default;
 	~Face() = default;
 
-	peri::math::uvec3 indices;
+	peri::math::Vec3<std::uint32_t> indices;
 	std::uint32_t material; //TODO investigate materials
 };
 

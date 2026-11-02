@@ -6,10 +6,10 @@ import synodic.soul.core;
 
 export class Ray {
 public:
-	peri::math::vec4 storage;
-	peri::math::vec4 origin;
-	peri::math::vec4 direction;
-	peri::math::vec2 bary;
+	peri::math::Vec4<float> storage;
+	peri::math::Vec4<float> origin;
+	peri::math::Vec4<float> direction;
+	peri::math::Vec2<float> bary;
 	std::uint32_t currentHit;
 	std::uint32_t resultOffset;
 	char job;

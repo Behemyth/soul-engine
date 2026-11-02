@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.5 FATAL_ERROR)
 
 set(CMAKE_CXX_MODULE_STD ON)
 
@@ -28,3 +28,9 @@ if(WIN32)
 endif()
 
 add_subdirectory(src)
+
+# Resolve example assets independently of the working directory
+cmake_path(SET VIEWER_ASSET_DIR NORMALIZE "${CMAKE_SOURCE_DIR}/resources/assets")
+target_compile_definitions(viewer PRIVATE
+    SOUL_ASSET_DIR="${VIEWER_ASSET_DIR}"
+)

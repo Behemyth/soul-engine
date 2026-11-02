@@ -12,7 +12,7 @@ public:
 	Tet() = default;
 	~Tet() = default;
 
-	peri::math::uvec4 indices;
+	peri::math::Vec4<std::uint32_t> indices;
 	std::uint32_t material;
 	std::uint32_t object;
 

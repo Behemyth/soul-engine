@@ -22,16 +22,16 @@ class CPPythonBase(ConanFile):
 
     def requirements(self):
         """CPPython managed requirements."""
-        self.requires("honesty/[>=0.0.0.dev1]")
         self.requires("periapsis/[>=0.0.0.dev1]")
         self.requires("cppaste/[>=0.0.0.dev1]")
-        self.requires("portability/[>=0.0.0.dev1]")
         self.requires("sdl/[>=3.2.20]")
         self.requires("vulkan-memory-allocator/3.3.0")
         self.requires("glaze/[>=6.0.1]")
         self.requires("freetype/2.14.1")
         self.requires("meshoptimizer/0.25")
+        self.requires("vulkan-headers/1.4.357.0")
+        self.requires("vulkan-loader/1.4.357.0")
 
     def build_requirements(self):
         """CPPython managed build and test requirements."""
-        pass  # No test requirements
+        self.test_requires("honesty/[>=0.0.0.dev1]")

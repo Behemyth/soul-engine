@@ -8,12 +8,12 @@ public:
 	Film();
 	~Film();
 
-	peri::math::uvec2 resolutionPrev;
-	peri::math::uvec2 resolution;
-	peri::math::uvec2 resolutionMax;
+	peri::math::Vec2<std::uint32_t> resolutionPrev;
+	peri::math::Vec2<std::uint32_t> resolution;
+	peri::math::Vec2<std::uint32_t> resolutionMax;
 
 	float resolutionRatio;
 
-	peri::math::vec4* results;
+	peri::math::Vec4<float>* results;
 	std::int32_t* hits;
 };

@@ -46,12 +46,12 @@ public:
 	{
 	}
 
-	Entity CreateSurface(NativeSurfaceHandle, peri::math::uvec2) override
+	Entity CreateSurface(NativeSurfaceHandle, peri::math::Vec2<std::uint32_t>) override
 	{
 		return Entity();
 	}
 
-	void UpdateSurface(Entity, peri::math::uvec2) override
+	void UpdateSurface(Entity, peri::math::Vec2<std::uint32_t>) override
 	{
 	}
 
