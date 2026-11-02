@@ -75,7 +75,7 @@ export namespace synodic::soul::gltf
 
 		[[nodiscard]] mesh::MeshResult<mesh::LoadedMesh> LoadFromMemory(
 			std::span<const std::byte> data,
-			std::string_view hint,
+			[[maybe_unused]] std::string_view hint,
 			const mesh::MeshLoadOptions& options = {}) override
 		{
 			if (data.size() < 4)

@@ -140,7 +140,7 @@ private:
 		}
 	}
 
-	void InsertBarriers(const CompiledRenderGraph& compiled, std::uint32_t beforePass, CommandList& commands) {
+	void InsertBarriers(const CompiledRenderGraph& compiled, std::uint32_t beforePass, [[maybe_unused]] CommandList& commands) {
 		// Find barriers that need to execute before this pass
 		for (const auto& barrier : compiled.barriers) {
 			if (barrier.beforePass == beforePass) {

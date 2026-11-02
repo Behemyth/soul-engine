@@ -12,7 +12,7 @@ public:
 	{
 		// TODO: Must be called on the main thread
 		constexpr SDL_InitFlags flags = SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD;
-		bool result = SDL_Init(flags);
+		[[maybe_unused]] bool result = SDL_Init(flags);
 
 		// TODO: Handle error
 	}

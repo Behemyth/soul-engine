@@ -142,7 +142,7 @@ private:
 		}
 	}
 
-	void HandleKeyboard(const SDL_KeyboardEvent& key, ButtonState state)
+	void HandleKeyboard([[maybe_unused]] const SDL_KeyboardEvent& key, [[maybe_unused]] ButtonState state)
 	{
 		// TODO: Implement keyboard callbacks when added to InputModule
 		// For now, just acknowledge the key event

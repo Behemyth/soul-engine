@@ -4,6 +4,12 @@ import std;
 import synodic.periapsis;
 import synodic.soul.core;
 
+// Math vectors are SIMD aligned, so the resulting padding is expected
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4324)
+#endif
+
 export class Vertex : Component
 {
 
@@ -72,3 +78,7 @@ public:
 	std::uint32_t object;
 
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

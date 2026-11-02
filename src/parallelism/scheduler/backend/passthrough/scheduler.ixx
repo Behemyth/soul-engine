@@ -69,7 +69,7 @@ void PassthroughSchedulerBackend::AddTask(TaskParameters params, Fn && fn, Args 
  * @param 		  	args  		Function arguments.
  */
 template<typename Fn, typename ... Args>
-void PassthroughSchedulerBackend::ForEachThread(TaskPriority priority, Fn && fn, Args && ... args) {
+void PassthroughSchedulerBackend::ForEachThread([[maybe_unused]] TaskPriority priority, Fn && fn, Args && ... args) {
 	// Single-threaded: execute once on the calling thread
 	std::invoke(std::forward<Fn>(fn), std::forward<Args>(args)...);
 }

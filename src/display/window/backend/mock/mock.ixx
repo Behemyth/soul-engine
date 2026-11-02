@@ -52,7 +52,7 @@ public:
 	}
 
 protected:
-	void OnWindowCreated(MockWindow& window) override
+	void OnWindowCreated([[maybe_unused]] MockWindow& window) override
 	{
 		// Mock: no actual window creation
 	}

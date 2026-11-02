@@ -171,7 +171,7 @@ protected:
 		window.SetNativeHandle(sdlWindow);
 	}
 
-	void OnWindowDestroyed(SDLWindow& window) override
+	void OnWindowDestroyed([[maybe_unused]] SDLWindow& window) override
 	{
 		// SDL window is automatically destroyed in SDLWindow destructor
 	}

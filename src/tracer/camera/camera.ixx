@@ -59,7 +59,7 @@ inline void Camera::UpdateVariables() {
 	// xHelper = right * tan(radians(fieldOfView.x * 0.5f));
 }
 
-inline void Camera::OffsetOrientation(float x, float y) {
+inline void Camera::OffsetOrientation([[maybe_unused]] float x, [[maybe_unused]] float y) {
 	// TODO: Implement rotation when proper math types are available
 	// right = normalize(rotateY(right, radians(x)));
 	// forward = normalize(rotateY(forward, radians(x)));

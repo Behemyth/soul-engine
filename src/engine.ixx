@@ -195,7 +195,7 @@ namespace synodic
 			}
 
 			// Called every frame - user defines the update logic
-			virtual void OnUpdate(Frame& current, Frame& previous)
+			virtual void OnUpdate([[maybe_unused]] Frame& current, [[maybe_unused]] Frame& previous)
 			{
 			}
 

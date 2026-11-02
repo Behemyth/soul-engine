@@ -30,7 +30,7 @@ inline Frame::Frame() :
 	id_(0) {
 }
 
-inline Frame::Frame(const Frame& previous, const Frame& host) :
+inline Frame::Frame(const Frame& previous, [[maybe_unused]] const Frame& host) :
 	id_(previous.id_ + 1) {
 	Dirty(true);
 }

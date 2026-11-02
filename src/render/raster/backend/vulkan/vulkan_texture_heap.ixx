@@ -249,7 +249,7 @@ void VulkanTextureHeap::Update(
 void VulkanTextureHeap::WriteDescriptor(
 	std::uint32_t index,
 	vk::ImageView imageView,
-	const TextureViewDesc& viewDesc)
+	[[maybe_unused]] const TextureViewDesc& viewDesc)
 {
 	// Calculate offset into descriptor buffer
 	std::byte* dstPtr = static_cast<std::byte*>(mappedPtr_) + (index * descriptorSize_);

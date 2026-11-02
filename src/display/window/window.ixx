@@ -139,11 +139,11 @@ public:
 
 protected:
 	// Override these for backend-specific window lifecycle
-	virtual void OnWindowCreated(WindowType& window)
+	virtual void OnWindowCreated([[maybe_unused]] WindowType& window)
 	{
 	}
 
-	virtual void OnWindowDestroyed(WindowType& window)
+	virtual void OnWindowDestroyed([[maybe_unused]] WindowType& window)
 	{
 	}
 

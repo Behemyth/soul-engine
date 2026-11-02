@@ -140,7 +140,7 @@ export namespace synodic::soul::gui
 			GenerateGeometry(drawList);
 		}
 
-		void RecordCommands(CommandList& commandList) override
+		void RecordCommands([[maybe_unused]] CommandList& commandList) override
 		{
 			if (vertices_.empty())
 			{

@@ -70,7 +70,7 @@ VulkanFrameBuffer<SchedulerType>::VulkanFrameBuffer(const vk::Device& device,
 	vk::FramebufferCreateInfo framebufferInfo;
 	framebufferInfo.flags = vk::FramebufferCreateFlags();
 	framebufferInfo.renderPass = renderPass.Handle();
-	framebufferInfo.attachmentCount = attachments.size();
+	framebufferInfo.attachmentCount = static_cast<std::uint32_t>(attachments.size());
 	framebufferInfo.pAttachments = attachments.data();
 	framebufferInfo.width = size.width;
 	framebufferInfo.height = size.height;

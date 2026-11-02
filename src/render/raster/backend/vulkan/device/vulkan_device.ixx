@@ -200,7 +200,7 @@ VulkanDevice<SchedulerType>::VulkanDevice(
 template<SchedulerBackend SchedulerType>
 typename VulkanDevice<SchedulerType>::BuildResult VulkanDevice<SchedulerType>::BuildDevice(
 	const vk::PhysicalDevice& physicalDevice,
-	std::span<std::string> validationLayers,
+	[[maybe_unused]] std::span<std::string> validationLayers,
 	std::span<std::string> requiredExtensions)
 {
 	// Device layers are deprecated; validation layers are enabled on the instance only

@@ -409,7 +409,7 @@ private:
 		});
 	}
 
-	void UpdateGameLogic(Frame& current, Frame& previous)
+	void UpdateGameLogic([[maybe_unused]] Frame& current, [[maybe_unused]] Frame& previous)
 	{
 		// Update camera position based on orbit parameters
 		float camX = orbitDistance_ * std::cos(orbitPitch_) * std::sin(orbitYaw_);
@@ -444,7 +444,7 @@ private:
 		pushConstants_.model = modelMatrix_;
 	}
 
-	void RenderFrame(Frame& current, Frame& previous)
+	void RenderFrame([[maybe_unused]] Frame& current, [[maybe_unused]] Frame& previous)
 	{
 		if (!hasValidSurface_)
 		{

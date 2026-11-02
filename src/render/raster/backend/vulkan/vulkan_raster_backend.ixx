@@ -480,7 +480,7 @@ void VulkanRasterBackend<SchedulerType>::Present()
 // See: DrawWithPointersCommand, VulkanBindlessLayout, VulkanGPUAllocator
 
 template<SchedulerBackend SchedulerType>
-void VulkanRasterBackend<SchedulerType>::UpdateMaterial(const void* materialData, std::size_t size)
+void VulkanRasterBackend<SchedulerType>::UpdateMaterial([[maybe_unused]] const void* materialData, [[maybe_unused]] std::size_t size)
 {
 	// TODO: With bindless, material data should be allocated via GPUAllocator
 	// and passed as a GPU pointer in the draw command's vertexData/pixelData.
@@ -488,7 +488,7 @@ void VulkanRasterBackend<SchedulerType>::UpdateMaterial(const void* materialData
 }
 
 template<SchedulerBackend SchedulerType>
-void VulkanRasterBackend<SchedulerType>::UpdateSceneLighting(const void* lightingData, std::size_t size)
+void VulkanRasterBackend<SchedulerType>::UpdateSceneLighting([[maybe_unused]] const void* lightingData, [[maybe_unused]] std::size_t size)
 {
 	// TODO: With bindless, lighting data should be allocated via GPUAllocator
 	// and passed as a GPU pointer in the draw command's pixelData.
@@ -496,7 +496,7 @@ void VulkanRasterBackend<SchedulerType>::UpdateSceneLighting(const void* lightin
 }
 
 template<SchedulerBackend SchedulerType>
-Entity VulkanRasterBackend<SchedulerType>::CreatePass(const ShaderSet& shaderSet, std::function<void(Entity)> function)
+Entity VulkanRasterBackend<SchedulerType>::CreatePass([[maybe_unused]] const ShaderSet& shaderSet, std::function<void(Entity)> function)
 {
 	// Generate new pass ID
 	const PassId passId = GeneratePassId();
@@ -676,7 +676,7 @@ Entity VulkanRasterBackend<SchedulerType>::CreatePass(const ShaderSet& shaderSet
 
 template<SchedulerBackend SchedulerType>
 Entity VulkanRasterBackend<SchedulerType>::CreateSubPass(Entity renderPassEntity,
-	const ShaderSet& shaderSet,
+	[[maybe_unused]] const ShaderSet& shaderSet,
 	std::function<void(Entity)> function)
 {
 	// Extract pass ID from Entity
@@ -1144,7 +1144,7 @@ void VulkanRasterBackend<SchedulerType>::ExecutePassWithFlags(Entity renderPassE
 }
 
 template<SchedulerBackend SchedulerType>
-void VulkanRasterBackend<SchedulerType>::CreatePassInput(Entity passEntity, Entity resource, Format format)
+void VulkanRasterBackend<SchedulerType>::CreatePassInput(Entity passEntity, [[maybe_unused]] Entity resource, [[maybe_unused]] Format format)
 {
 	// Extract pass ID from Entity
 	PassId passId;
@@ -1159,7 +1159,7 @@ void VulkanRasterBackend<SchedulerType>::CreatePassInput(Entity passEntity, Enti
 }
 
 template<SchedulerBackend SchedulerType>
-void VulkanRasterBackend<SchedulerType>::CreatePassOutput(Entity passEntity, Entity resource, Format format)
+void VulkanRasterBackend<SchedulerType>::CreatePassOutput(Entity passEntity, [[maybe_unused]] Entity resource, Format format)
 {
 	// Extract pass ID from Entity
 	PassId passId;
@@ -1228,7 +1228,6 @@ Entity VulkanRasterBackend<SchedulerType>::CreateSurface(NativeSurfaceHandle nat
 	CreateDepthBuffer(surfaceData, {swapChainSize.width, swapChainSize.height});
 
 	// Create frame synchronization resources
-	const auto imageCount = surfaceData.swapChain->Images().size();
 	surfaceData.frames.resize(frameCount);
 
 	for (std::uint32_t i = 0; i < frameCount; ++i) {
@@ -1529,7 +1528,7 @@ void VulkanRasterBackend<SchedulerType>::UploadBufferData(GPUBufferHandle handle
 			std::memcpy(static_cast<char*>(bufferData.mappedPtr) + offset, data, size);
 			// Flush if not cached
 			if (bufferData.memory == BufferMemory::HostVisible) {
-				allocator.FlushAllocation(bufferData.allocation, offset, size);
+				std::ignore = allocator.FlushAllocation(bufferData.allocation, offset, size);
 			}
 		}
 		return;
@@ -1565,7 +1564,9 @@ void VulkanRasterBackend<SchedulerType>::UploadBufferData(GPUBufferHandle handle
 
 	// Copy data to staging buffer
 	std::memcpy(stagingBuffer_->mappedPtr, data, size);
-	allocator.FlushAllocation(stagingBuffer_->allocation, 0, size);
+	if (!allocator.FlushAllocation(stagingBuffer_->allocation, 0, size)) {
+		return;  // Staged data would not be visible to the transfer
+	}
 
 	// Use graphics queue for transfers since our command pool is created for graphics queue family
 	// TODO: Create separate transfer command pool for async transfers on dedicated transfer queue
@@ -1628,7 +1629,7 @@ void* VulkanRasterBackend<SchedulerType>::MapBuffer(GPUBufferHandle handle)
 }
 
 template<SchedulerBackend SchedulerType>
-void VulkanRasterBackend<SchedulerType>::UnmapBuffer(GPUBufferHandle handle)
+void VulkanRasterBackend<SchedulerType>::UnmapBuffer([[maybe_unused]] GPUBufferHandle handle)
 {
 	// Our buffers are persistently mapped, so nothing to do
 	// This exists for API completeness and future flexibility
@@ -1659,7 +1660,7 @@ void VulkanRasterBackend<SchedulerType>::FlushBuffer(GPUBufferHandle handle,
 		size = bufferData.size - offset;
 	}
 
-	allocator.FlushAllocation(bufferData.allocation, offset, size);
+	std::ignore = allocator.FlushAllocation(bufferData.allocation, offset, size);
 }
 
 template<SchedulerBackend SchedulerType>
