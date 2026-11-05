@@ -22,3 +22,5 @@ vc140.pdb
 #Build
 /dist
 .pdm-python
+
+.cppython.toml

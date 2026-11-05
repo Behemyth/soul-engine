@@ -22,7 +22,12 @@
 			},
 			"cacheVariables": {
 				"CMAKE_C_FLAGS_INIT": "/W4",
-				"CMAKE_CXX_FLAGS_INIT": "/W4"
+				"CMAKE_CXX_FLAGS_INIT": "/W4",
+				"CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/tool/cmake/platform/common/SetMSVCRuntime.cmake",
+				"CMAKE_MAP_IMPORTED_CONFIG_DEVELOPMENT": {
+					"type": "STRING",
+					"value": "Release"
+				}
 			}
 		},
 		{
@@ -33,6 +38,7 @@
 			"inherits": [
 				"windows-default"
 			],
+			"hidden": true,
 			"cacheVariables": {
 				"CMAKE_C_COMPILER": "cl",
 				"CMAKE_CXX_COMPILER": "cl"
@@ -40,6 +46,52 @@
 			"vendor": {
 				"microsoft.com/VisualStudioSettings/CMake/1.0": {
 					"intelliSenseMode": "windows-msvc-x64"
+				}
+			}
+		},
+		{
+			"name": "windows-ninja-msvc-release",
+			"inherits": [
+				"cppython-release",
+				"windows-ninja-msvc"
+			],
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"cacheVariables": {
+				"CMAKE_CONFIGURATION_TYPES": {
+					"type": "STRING",
+					"value": "Release"
+				}
+			}
+		},
+		{
+			"name": "windows-ninja-msvc-development",
+			"inherits": [
+				"cppython-release",
+				"windows-ninja-msvc"
+			],
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"cacheVariables": {
+				"CMAKE_CONFIGURATION_TYPES": {
+					"type": "STRING",
+					"value": "Development"
+				},
+				"CMAKE_MAP_IMPORTED_CONFIG_DEVELOPMENT": {
+					"type": "STRING",
+					"value": "Release"
+				}
+			}
+		},
+		{
+			"name": "windows-ninja-msvc-debug",
+			"inherits": [
+				"cppython-debug",
+				"windows-ninja-msvc"
+			],
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"cacheVariables": {
+				"CMAKE_CONFIGURATION_TYPES": {
+					"type": "STRING",
+					"value": "Debug"
 				}
 			}
 		},
@@ -102,7 +154,7 @@
 		{
 			"name": "windows-ninja-msvc-release",
 			"displayName": "Ninja MSVC Release",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-release",
 			"configuration": "Release",
 			"inherits": [
 				"windows-default"
@@ -111,7 +163,7 @@
 		{
 			"name": "windows-ninja-msvc-development",
 			"displayName": "Ninja MSVC Development",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-development",
 			"configuration": "Development",
 			"inherits": [
 				"windows-default"
@@ -120,7 +172,7 @@
 		{
 			"name": "windows-ninja-msvc-debug",
 			"displayName": "Ninja MSVC Debug",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-debug",
 			"configuration": "Debug",
 			"inherits": [
 				"windows-default"
@@ -224,7 +276,7 @@
 		{
 			"name": "windows-ninja-msvc-debug",
 			"displayName": "Ninja MSVC Debug",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-debug",
 			"inherits": [
 				"windows-default"
 			],
@@ -233,7 +285,7 @@
 		{
 			"name": "windows-ninja-msvc-development",
 			"displayName": "Ninja MSVC Development",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-development",
 			"inherits": [
 				"windows-default"
 			],
@@ -242,7 +294,7 @@
 		{
 			"name": "windows-ninja-msvc-release",
 			"displayName": "Ninja MSVC Release",
-			"configurePreset": "windows-ninja-msvc",
+			"configurePreset": "windows-ninja-msvc-release",
 			"inherits": [
 				"windows-default"
 			],
